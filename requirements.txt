@@ -1,0 +1,22 @@
+# ── Extraction ──
+requests>=2.31.0          # HTTP client for API calls
+python-dotenv>=1.0.0      # Load .env files
+pydantic>=2.5.0           # Data validation & schema enforcement
+
+# ── Loading ──
+psycopg2-binary>=2.9.9    # PostgreSQL driver
+duckdb>=0.10.0            # DuckDB (local/POC warehouse)
+
+# ── Transformation ──
+dbt-core>=1.7.0           # dbt framework
+dbt-duckdb>=1.7.0         # dbt adapter for DuckDB
+dbt-postgres>=1.7.0       # dbt adapter for PostgreSQL
+
+# ── Export ──
+gspread>=6.0.0            # Google Sheets API client
+google-auth>=2.25.0       # Google authentication
+
+# ── Utilities ──
+python-json-logger>=2.0.0 # JSON-formatted logging
+
+# ── Testing ──

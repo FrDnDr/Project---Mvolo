@@ -1,0 +1,68 @@
+# ============================================
+# Mvolo — .gitignore
+# ============================================
+
+# ── Environment & Secrets ──
+.env
+*.env
+!.env.example
+secrets/
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# ── Evolution & History ──
+.history/
+.vscode/
+.idea/
+
+# ── Documentation (User Requested) ──
+docs/
+learning_roadmap.md
+LEARNING_ROADMAP.md
+
+# ── Databases ──
+*.duckdb
+*.duckdb.wal
+*.duckdb.tmp/
+
+# ── dbt (Transformation) ──
+transform/target/
+transform/dbt_packages/
+transform/logs/
+profiles.yml
+!transform/seeds/*.csv
+
+# ── Docker ──
+docker/metabase/metabase.db/
+.docker/
+
+# ── Data ──
+# Ignore raw data (contains PII), but keep sample data
+data/raw/
+*.csv
+*.json
+!data/sample/*.json
+!tests/fixtures/*.json
+!transform/seeds/*.csv
+
+# ── Logs ──
+logs/
+*.log
+
+# ── OS Specific ──
+.DS_Store
+Thumbs.db
+Desktop.ini
