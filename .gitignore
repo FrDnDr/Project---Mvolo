@@ -32,6 +32,7 @@ build/
 docs/
 learning_roadmap.md
 LEARNING_ROADMAP.md
+project_directory_plan.md
 
 # ── Databases ──
 *.duckdb
