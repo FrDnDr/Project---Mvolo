@@ -28,6 +28,8 @@ Shopify API ──┘         (Python)    (dbt)          └──→ Google She
 
 ## 🏛️ Architecture Overview
 
+> **Detailed Documentation:** See [docs/architecture.md](docs/architecture.md) for a full breakdown of patterns and data flows.
+
 ![Architecture Diagram](docs/diagrams/etl_flow.png)
 
 | Layer | Technology | Description |
