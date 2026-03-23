@@ -1,0 +1,74 @@
+services:
+  # ── PostgreSQL Data Warehouse ──
+  postgres:
+    image: postgres:16-alpine
+    container_name: mvolo-postgres
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mvolo}
+      POSTGRES_USER: ${POSTGRES_USER:-mvolo_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mvolo_user} -d ${POSTGRES_DB:-mvolo}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Metabase Dashboards ──
+  metabase:
+    image: metabase/metabase:latest
+    container_name: mvolo-metabase
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_HOST: postgres
+      MB_DB_PORT: 5432
+      MB_DB_DBNAME: metabase
+      MB_DB_USER: ${POSTGRES_USER:-mvolo_user}
+      MB_DB_PASS: ${POSTGRES_PASSWORD:-changeme}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - metabase_data:/metabase-data
+
+  # ── DuckDB Local Development ──
+  duckdb:
+    build: .
+    container_name: mvolo-duckdb
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    command: ["tail", "-f", "/dev/null"]
+
+  # ── N8N Workflow Automation ──
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: mvolo-n8n
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${N8N_PORT:-5678}:5678"
+    environment:
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: ${N8N_BASIC_AUTH_USER:-admin}
+      N8N_BASIC_AUTH_PASSWORD: ${N8N_BASIC_AUTH_PASSWORD:-changeme}
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      TZ: UTC
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  postgres_data:
+  metabase_data:
+  n8n_data:
