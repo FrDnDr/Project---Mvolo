@@ -79,3 +79,8 @@ Project - Mvolo.code-workspace
 
 # ── env ──
 
+# visualization
+visualization/bol-dashboard/data
+
+# shopify oauth
+shopify-oauth/
