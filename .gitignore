@@ -80,6 +80,7 @@ Project - Mvolo.code-workspace
 
 # visualization
 visualization/bol-dashboard/data
+visualization/shopify-dashboard/data
 
 # shopify oauth
 shopify-oauth/
