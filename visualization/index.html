@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mvolo | Multi-Platform Analytics</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Master Assets -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="is-bol">
+
+    <header class="master-nav">
+        <div class="logo">
+            <img src="images/mvolo_eu_logo.jpg" class="logo-img" alt="Mvolo Logo">
+            MVOLO <span>ANALYTICS</span>
+        </div>
+        
+        <div class="toggle-container" id="platformToggle">
+            <div class="toggle-slider" id="slider"></div>
+            <div class="toggle-option active" data-platform="bol">Bol.com</div>
+            <div class="toggle-option" data-platform="shopify">Shopify</div>
+        </div>
+    </header>
+
+    <main class="viewport">
+        <!-- Defaulting to Bol.com Dashboard -->
+        <iframe id="dashboardFrame" src="bol-dashboard/dashboard-proper/bol.html"></iframe>
+        <div class="platform-indicator" id="bgText">BOL.COM</div>
+        <footer class="master-footer">Developed by Francis Dreu - Data Analytics Intern</footer>
+    </main>
+
+    <!-- Master Control Script -->
+    <script src="main.js"></script>
+</body>
+</html>

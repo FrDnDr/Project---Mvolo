@@ -211,9 +211,12 @@ def run_extraction(args):
             orders_count = loader.load_orders(orders)
 
         # ── Extract & Load Offers ──
-        if not args.orders_only:
             offers = extractor.extract_offers()
             offers_count = loader.load_offers(offers)
+
+        # ── Export for Dashboard ──
+        export_path = PROJECT_ROOT / "visualization" / "data" / "bol_profitability.csv"
+        loader.export_profitability_summary(str(export_path), platform="bol")
 
         # ── Summary ──
         print("\n" + "=" * 60)

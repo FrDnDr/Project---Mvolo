@@ -1,0 +1,170 @@
+:root {
+    --bol-blue: #2d68ff;
+    --shopify-green: #5c7c33;
+    --bg-dark: #0f1117;
+    --transition-speed: 0.6s;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: background var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Platform State Transitions */
+body.is-bol {
+    background: 
+        radial-gradient(circle at 10% 10%, rgba(45, 104, 255, 0.15), transparent 50%),
+        var(--bg-dark);
+}
+
+body.is-shopify {
+    background: 
+        radial-gradient(circle at 90% 10%, rgba(92, 124, 51, 0.2), transparent 50%),
+        var(--bg-dark);
+}
+
+/* Master Navigation Header */
+.master-nav {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 17, 23, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 100;
+}
+
+.logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo span {
+    opacity: 0.6;
+    font-weight: 400;
+}
+
+.logo-img {
+    height: 32px;
+    width: auto;
+    border-radius: 4px;
+}
+
+/* Sliding Toggle Logic */
+.toggle-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50px;
+    display: flex;
+    padding: 4px;
+    width: 240px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.toggle-container:active {
+    transform: scale(0.98);
+}
+
+.toggle-option {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
+    transition: color 0.3s ease;
+    user-select: none;
+}
+
+.toggle-option.active {
+    color: #fff;
+}
+
+.toggle-slider {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
+    background: var(--bol-blue);
+    border-radius: 40px;
+    transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), background 0.4s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Dashboard Viewport */
+.viewport {
+    flex-grow: 1;
+    position: relative;
+    background: transparent;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    background: transparent;
+}
+
+iframe.fade-out {
+    opacity: 0;
+    transform: scale(0.995);
+}
+
+/* Active Platform Theming */
+body.is-shopify .toggle-slider {
+    background: var(--shopify-green);
+    transform: translateX(100%);
+}
+
+/* Background Watermark */
+.platform-indicator {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8rem;
+    opacity: 0.03;
+    pointer-events: none;
+    color: #fff;
+    text-transform: uppercase;
+    transition: opacity 0.6s ease;
+}
+
+.master-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    background: linear-gradient(to top, rgba(15, 17, 23, 0.9), transparent);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    z-index: 10;
+}
