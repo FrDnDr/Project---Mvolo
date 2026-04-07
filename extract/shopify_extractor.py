@@ -107,6 +107,28 @@ class ShopifyExtractor(BaseExtractor):
         
         return flattened_items
 
+    def flatten_product_variants(self, products: list[dict]) -> list[dict]:
+        """
+        Flattens Shopify product variants into a list suitable for the loader.
+        """
+        flattened = []
+        for product in products:
+            product_id = str(product.get("id"))
+            product_title = product.get("title")
+            
+            for variant in product.get("variants", []):
+                flattened.append({
+                    "id": str(variant.get("id")),
+                    "product_id": product_id,
+                    "title": f"{product_title} - {variant.get('title')}" if variant.get('title') != "Default Title" else product_title,
+                    "sku": variant.get("sku"),
+                    "price": float(variant.get("price") or 0),
+                    "compare_at_price": float(variant.get("compare_at_price") or 0),
+                    "inventory_quantity": variant.get("inventory_quantity", 0),
+                    "updated_at": variant.get("updated_at")
+                })
+        return flattened
+
     def load_local_products(self, file_path: str) -> list[dict]:
         """
         Loads product data from a local JSON file (collected by user).
@@ -114,7 +136,8 @@ class ShopifyExtractor(BaseExtractor):
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
-                products = data.get("products", [])
+                # Handle both { "products": [...] } and direct list formats
+                products = data.get("products", []) if isinstance(data, dict) else data
                 logger.info(f"Loaded {len(products)} products from {file_path}")
                 return products
         except Exception as e:

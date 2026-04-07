@@ -120,10 +120,16 @@ function pickColumnExpr(columns, candidates, sqlType, fallbackSql = null) {
   for (const candidate of candidates) {
     const found = columns.get(normalizeToken(candidate));
     if (found) {
+      if (sqlType === "DOUBLE") {
+        return `TRY_CAST(regexp_replace(CAST(${quoteIdent(found)} AS VARCHAR), '[^0-9\\.\\-]', '', 'g') AS DOUBLE)`;
+      }
       return `CAST(${quoteIdent(found)} AS ${sqlType})`;
     }
   }
   if (fallbackSql) {
+    if (sqlType === "DOUBLE" && !String(fallbackSql).includes('(')) {
+       return `TRY_CAST(regexp_replace(CAST(${fallbackSql} AS VARCHAR), '[^0-9\\.\\-]', '', 'g') AS DOUBLE)`;
+    }
     return `CAST(${fallbackSql} AS ${sqlType})`;
   }
   return `NULL::${sqlType}`;
@@ -136,8 +142,8 @@ export async function buildNormalizedView(relationSql) {
   const unitsExpr = pickColumnExpr(columns, ["units_sold", "unitssold", "quantity", "qty", "units"], "DOUBLE", pickColumnExpr(columns, ["Units_Sold"], "DOUBLE", "0"));
   const revenueExpr = pickColumnExpr(columns, ["revenue", "total_revenue", "sales", "turnover"], "DOUBLE", pickColumnExpr(columns, ["Total_Revenue"], "DOUBLE", "0"));
   const marginExpr = pickColumnExpr(columns, ["net_margin_pct", "margin_pct", "margin_percent", "margin_percentage", "margin"], "DOUBLE", pickColumnExpr(columns, ["Margin_PCT_Avg"], "DOUBLE", "0"));
-  const salePriceExpr = pickColumnExpr(columns, ["selling_price", "sale_price", "sell_price_avg", "price"], "DOUBLE", pickColumnExpr(columns, ["Sell_Price_Avg"], "DOUBLE", "0"));
-  const originalPriceExpr = pickColumnExpr(columns, ["original_price", "list_price", "price_original"], "DOUBLE", pickColumnExpr(columns, ["Original_Price_Avg"], "DOUBLE", "0"));
+  const salePriceExpr = pickColumnExpr(columns, ["selling_price", "sale_price", "sell_price_avg", "price", "sell"], "DOUBLE", pickColumnExpr(columns, ["Sell_Price_Avg"], "DOUBLE", "0"));
+  const originalPriceExpr = pickColumnExpr(columns, ["original_price", "list_price", "price_original", "original", "compare_at_price"], "DOUBLE", salePriceExpr);
   const orderDateExpr = pickColumnExpr(columns, ["order_date", "date", "latest_order", "created_at", "latest"], "TIMESTAMP", pickColumnExpr(columns, ["Latest_Order"], "TIMESTAMP", "CURRENT_TIMESTAMP"));
   const weekRawExpr = pickColumnExpr(columns, ["week_number", "week", "week_no", "weeknr"], "VARCHAR", `CAST(EXTRACT(WEEK FROM ${orderDateExpr}) AS VARCHAR)`);
   const weekExpr = `COALESCE(
@@ -148,10 +154,10 @@ export async function buildNormalizedView(relationSql) {
   const discountRawExpr = pickColumnExpr(columns, ["discount_applied", "discount", "discounted"], "VARCHAR", pickColumnExpr(columns, ["Discount_Pct_Avg"], "VARCHAR", "'No'"));
   const eanExpr = pickColumnExpr(columns, ["ean", "sku"], "VARCHAR", "''");
   const cogsExpr = pickColumnExpr(columns, ["cogs", "cogs_avg", "cost"], "DOUBLE", "0");
-  const adCostExpr = pickColumnExpr(columns, ["estimated_ad_cost", "ad_cost", "ads", "ad_cost_avg"], "DOUBLE", "0");
+  const adCostExpr = pickColumnExpr(columns, ["estimated_ad_cost", "ad_cost", "ads", "ad_cost_avg", "ad"], "DOUBLE", "0");
   const marginEurExpr = pickColumnExpr(columns, ["net_margin_eur", "margin_eur", "margin_eur_avg", "profit", "total_profit"], "DOUBLE", "0");
   const netSellExpr = pickColumnExpr(columns, ["net_selling_price", "net_sell"], "DOUBLE", `(${salePriceExpr} / 1.21)`);
-  const discPctExpr = pickColumnExpr(columns, ["discount_used_pct", "discount_pct", "discount_pct_avg"], "DOUBLE", "0");
+  const discPctExpr = pickColumnExpr(columns, ["discount_used_pct", "discount_pct", "discount_pct_avg", "disc"], "DOUBLE", "0");
 
   const discountExpr = `CASE
     WHEN lower(trim(CAST(${discountRawExpr} AS VARCHAR))) IN ('yes','y','true','1','with_discount') THEN TRUE

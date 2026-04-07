@@ -158,7 +158,7 @@ CREATE_SHOPIFY_PROFITABILITY_VIEW_SQL = """
             l.sku,
             l.name as product_name,
             l.quantity as units_sold,
-            l.price as original_price,
+            COALESCE(c.original_price, l.price) as original_price,
             (l.price * l.quantity - l.total_discount) / NULLIF(l.quantity, 0) as selling_price,
             COALESCE(c.cogs, 0) as cogs,
             COALESCE(c.estimated_ad_cost, 0) as estimated_ad_cost,

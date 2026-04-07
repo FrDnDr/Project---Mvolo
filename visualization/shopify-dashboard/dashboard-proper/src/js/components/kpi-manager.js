@@ -12,7 +12,7 @@ export function applyKpis(rows) {
   const avgWeeklyRevenueEx = totalRevenueEx / weekCount;
 
   const avgMargin = rows.length ? rows.reduce((sum, r) => sum + r.net_margin_pct, 0) / rows.length : 0;
-  const discountRate = rows.length ? (rows.filter((r) => r.discount_applied).length / rows.length) * 100 : 0;
+  const discountRate = rows.length ? rows.reduce((sum, r) => sum + (r.discount_used_pct || 0), 0) / rows.length : 0;
 
   // ── Aggregate by product ──
   const productMap = new Map();
