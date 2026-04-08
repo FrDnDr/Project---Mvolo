@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mvolo Bol Conversion Dashboard</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-noise"></div>
+  <main class="app-shell">
+    <header class="hero-card">
+      <div>
+        <p class="eyebrow">MVOLO · BOL.COM</p>
+        <h1>Product Conversion Dashboard</h1>
+        <p class="subhead">Conversion = (Orders / Visits) × 100 · Visits combined NL + BE by default</p>
+      </div>
+      <div id="updatedAt" class="pill">Loading data...</div>
+    </header>
+
+    <section class="controls card">
+      <div class="field-group mode-toggle" role="group" aria-label="Period mode">
+        <button id="modeWeekly" class="mode-btn active" type="button">Weekly</button>
+        <button id="modeMonthly" class="mode-btn" type="button">Monthly</button>
+      </div>
+      <div class="field-group">
+        <label for="periodSelect">Period</label>
+        <select id="periodSelect"></select>
+      </div>
+      <div class="field-group">
+        <label for="productSearch">Product filter</label>
+        <input id="productSearch" type="text" placeholder="Search product or offer id" />
+      </div>
+      <div class="field-group">
+        <label for="countryView">Visits view</label>
+        <select id="countryView">
+          <option value="TOTAL">Combined (NL + BE)</option>
+          <option value="NL">NL only</option>
+          <option value="BE">BE only</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="kpis">
+      <article class="kpi card"><h2>Total Orders</h2><p id="kpiOrders">-</p></article>
+      <article class="kpi card"><h2>Total Visits</h2><p id="kpiVisits">-</p></article>
+      <article class="kpi card"><h2>Avg Conversion</h2><p id="kpiConv">-</p></article>
+      <article class="kpi card"><h2>Top Product</h2><p id="kpiTop">-</p></article>
+    </section>
+
+    <section class="charts-grid">
+      <article class="card chart-card">
+        <h3>Daily Visits</h3>
+        <canvas id="visitsChart"></canvas>
+      </article>
+      <article class="card chart-card">
+        <h3>Daily Orders</h3>
+        <canvas id="ordersChart"></canvas>
+      </article>
+      <article class="card chart-card full-width">
+        <h3>Weekly Conversion Trend</h3>
+        <canvas id="trendChart"></canvas>
+      </article>
+    </section>
+
+    <section class="card table-card">
+      <div class="table-header">
+        <h3>Product Conversion Table</h3>
+        <div id="tableMeta" class="muted"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><button class="sort-btn" data-key="product_name">Product Name</button></th>
+              <th><button class="sort-btn" data-key="offer_id">Offer ID</button></th>
+              <th><button class="sort-btn" data-key="orders">Number of Orders</button></th>
+              <th><button class="sort-btn" data-key="visits_active">Number of Visits</button></th>
+              <th><button class="sort-btn" data-key="conversion_rate">Conversion Rate (%)</button></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

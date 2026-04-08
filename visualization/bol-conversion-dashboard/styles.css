@@ -1,0 +1,260 @@
+:root {
+  --bg: #090d12;
+  --card: #121923;
+  --card-2: #172333;
+  --line: #2a3f58;
+  --text: #ebf2fb;
+  --muted: #8fa6bf;
+  --accent: #ff6a3d;
+  --accent-2: #47d9a8;
+  --accent-3: #4fb2ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 500px at 12% -10%, rgba(79, 178, 255, 0.2), transparent 55%),
+    radial-gradient(1000px 450px at 85% -20%, rgba(255, 106, 61, 0.2), transparent 50%),
+    linear-gradient(180deg, #090d12 0%, #070a0f 100%);
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.bg-noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: radial-gradient(#fff 0.5px, transparent 0.5px);
+  background-size: 2px 2px;
+}
+
+.app-shell {
+  width: min(1400px, 94vw);
+  margin: 20px auto 32px;
+  display: grid;
+  gap: 14px;
+}
+
+.card {
+  background: linear-gradient(165deg, rgba(18, 25, 35, 0.95), rgba(14, 21, 32, 0.95));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.hero-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(145deg, rgba(26, 38, 55, 0.95), rgba(15, 21, 33, 0.95));
+  border: 1px solid #31506f;
+  border-radius: 16px;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent-2);
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+}
+
+h1 {
+  margin: 6px 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
+
+.subhead {
+  margin: 0;
+  color: var(--muted);
+}
+
+.pill {
+  background: rgba(71, 217, 168, 0.12);
+  border: 1px solid rgba(71, 217, 168, 0.5);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: #baf4df;
+}
+
+.controls {
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.field-group {
+  display: grid;
+  gap: 6px;
+  grid-column: span 3;
+}
+
+.field-group label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+input,
+select,
+.mode-btn {
+  border-radius: 10px;
+  border: 1px solid #38506d;
+  background: #0f1621;
+  color: var(--text);
+  padding: 10px;
+  font-size: 14px;
+}
+
+.mode-toggle {
+  display: flex;
+  grid-column: span 3;
+  gap: 6px;
+  align-items: end;
+}
+
+.mode-btn {
+  cursor: pointer;
+  flex: 1;
+  transition: 0.2s ease;
+}
+
+.mode-btn.active {
+  background: linear-gradient(120deg, #285786, #4fb2ff);
+  border-color: #58b8ff;
+}
+
+.kpis {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.kpi {
+  padding: 14px;
+}
+
+.kpi h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.kpi p {
+  margin: 10px 0 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.charts-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.chart-card {
+  padding: 14px;
+  height: 380px;
+}
+
+.chart-card h3,
+.table-card h3 {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+  height: 420px;
+}
+
+.table-card {
+  padding: 12px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.table-wrap {
+  margin-top: 10px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 880px;
+}
+
+th,
+td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #29415d;
+  text-align: left;
+}
+
+.sort-btn {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+
+tbody tr:hover {
+  background: rgba(79, 178, 255, 0.08);
+}
+
+@media (max-width: 1080px) {
+  .field-group,
+  .mode-toggle {
+    grid-column: span 6;
+  }
+
+  .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .field-group,
+  .mode-toggle {
+    grid-column: span 12;
+  }
+
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+}
