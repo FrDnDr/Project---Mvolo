@@ -1,0 +1,93 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: "Raw tables loaded directly from Bol.com and Shopify APIs"
+
+    tables:
+      - name: bol_orders
+        description: "Raw Bol.com order line items extracted from the Retailer API"
+        columns:
+          - name: order_id
+            description: "Bol.com order ID"
+            tests:
+              - not_null
+          - name: order_item_id
+            description: "Unique identifier for each line item within an order"
+            tests:
+              - not_null
+              - unique
+          - name: ean
+            description: "European Article Number (product barcode)"
+            tests:
+              - not_null
+          - name: unit_price
+            description: "Selling price per unit in EUR (VAT included)"
+            tests:
+              - not_null
+          - name: quantity
+            description: "Units sold"
+            tests:
+              - not_null
+
+      - name: bol_offers
+        description: "Raw Bol.com offer/listing data (stock, pricing) from the Retailer API"
+        columns:
+          - name: offer_id
+            description: "Unique identifier for the Bol.com offer"
+            tests:
+              - not_null
+              - unique
+          - name: ean
+            description: "European Article Number"
+            tests:
+              - not_null
+
+      - name: bol_product_costs
+        description: "Manually managed COGS and ad cost data per EAN"
+        columns:
+          - name: ean
+            description: "European Article Number — primary key"
+            tests:
+              - not_null
+              - unique
+
+      - name: shopify_orders
+        description: "Raw Shopify order headers extracted from the Admin API"
+        columns:
+          - name: order_id
+            description: "Shopify order ID"
+            tests:
+              - not_null
+              - unique
+          - name: total_price
+            description: "Total order value in EUR"
+            tests:
+              - not_null
+
+      - name: shopify_order_items
+        description: "Raw Shopify order line items"
+        columns:
+          - name: line_item_id
+            description: "Unique identifier for the line item"
+            tests:
+              - not_null
+              - unique
+          - name: order_id
+            description: "Parent order ID — foreign key to shopify_orders"
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('raw', 'shopify_orders')
+                    field: order_id
+
+      - name: shopify_product_costs
+        description: "Manually managed COGS and ad cost data per SKU"
+        columns:
+          - name: sku
+            description: "Shopify SKU — primary key"
+            tests:
+              - not_null
+              - unique

@@ -44,6 +44,8 @@ transform/dbt_packages/
 transform/logs/
 profiles.yml
 !transform/seeds/*.csv
+transform/.user.yml
+
 
 # ── Docker ──
 docker/metabase/metabase.db/
@@ -84,3 +86,7 @@ visualization/shopify-dashboard/data
 
 # shopify oauth
 shopify-oauth/
+
+# ── scripts  ──
+scripts/run_all_automation.py
+scripts/setup_scheduler.ps1

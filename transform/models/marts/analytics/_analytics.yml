@@ -1,0 +1,114 @@
+version: 2
+
+models:
+  - name: bol_profitability
+    description: >
+      Per-order-line profitability for Bol.com. Joins orders, offers, and manual
+      COGS data. Calculates net margin after VAT (21%), Bol commission, COGS,
+      and estimated ad costs.
+    columns:
+      - name: order_item_id
+        description: "Primary key — unique per row"
+        tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        tests:
+          - not_null
+
+      - name: date
+        tests:
+          - not_null
+
+      - name: ean
+        tests:
+          - not_null
+
+      - name: units_sold
+        description: "Must be a positive integer"
+        tests:
+          - not_null
+
+      - name: selling_price
+        description: "Gross selling price per unit in EUR (VAT included)"
+        tests:
+          - not_null
+
+      - name: bol_commission
+        tests:
+          - not_null
+
+      - name: net_selling_price
+        description: "selling_price / 1.21 — price ex-VAT"
+        tests:
+          - not_null
+
+      - name: net_margin_eur
+        description: "Net profit per unit: net_selling_price - cogs - ad_cost - commission"
+        tests:
+          - not_null
+
+      - name: net_margin_pct
+        description: "Net margin as a percentage of net_selling_price"
+        tests:
+          - not_null
+
+      - name: revenue
+        description: "selling_price * units_sold"
+        tests:
+          - not_null
+
+      - name: profit
+        description: "net_margin_eur * units_sold"
+        tests:
+          - not_null
+
+  - name: shopify_profitability
+    description: >
+      Per-line-item profitability for Shopify. Joins order headers, line items,
+      and manual COGS data. Calculates net margin after VAT (21%), 12% affiliate
+      fee (when landing_site is set), and COGS.
+    columns:
+      - name: line_item_id
+        description: "Primary key — unique per row"
+        tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        tests:
+          - not_null
+
+      - name: date
+        tests:
+          - not_null
+
+      - name: units_sold
+        tests:
+          - not_null
+
+      - name: selling_price
+        description: "Effective per-unit price after discounts"
+        tests:
+          - not_null
+
+      - name: net_selling_price
+        description: "selling_price / 1.21 — price ex-VAT"
+        tests:
+          - not_null
+
+      - name: net_margin_eur
+        description: "Net profit per unit: net_selling_price - cogs - affiliate_fee"
+        tests:
+          - not_null
+
+      - name: revenue
+        description: "selling_price * units_sold"
+        tests:
+          - not_null
+
+      - name: profit
+        description: "net_margin_eur * units_sold"
+        tests:
+          - not_null

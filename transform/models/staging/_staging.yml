@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: stg_bol_orders
+    description: "Cleaned Bol.com order line items — casts order_placed_at to timestamp, filters invalid rows"
+    columns:
+      - name: order_item_id
+        description: "Unique line item ID (primary key for this model)"
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        description: "Bol.com order ID"
+        tests:
+          - not_null
+      - name: order_placed_at
+        description: "Order timestamp (cast from raw VARCHAR)"
+        tests:
+          - not_null
+      - name: ean
+        description: "Product EAN"
+        tests:
+          - not_null
+      - name: quantity
+        description: "Units sold — must be positive"
+        tests:
+          - not_null
+      - name: unit_price
+        description: "Selling price per unit in EUR (VAT included) — must be positive"
+        tests:
+          - not_null
+      - name: commission
+        description: "Bol.com commission charged per unit"
+        tests:
+          - not_null
+
+  - name: stg_bol_offers
+    description: "Cleaned Bol.com offer/listing data"
+    columns:
+      - name: offer_id
+        tests:
+          - not_null
+          - unique
+      - name: ean
+        tests:
+          - not_null
+      - name: unit_price
+        tests:
+          - not_null
+
+  - name: stg_shopify_orders
+    description: "Cleaned Shopify order headers"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: created_at
+        tests:
+          - not_null
+      - name: total_price
+        tests:
+          - not_null
+
+  - name: stg_shopify_order_items
+    description: "Cleaned Shopify order line items"
+    columns:
+      - name: line_item_id
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_shopify_orders')
+                field: order_id
+      - name: quantity
+        tests:
+          - not_null
+      - name: price
+        tests:
+          - not_null
